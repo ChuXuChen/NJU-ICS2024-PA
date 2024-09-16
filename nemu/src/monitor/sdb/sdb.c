@@ -64,7 +64,7 @@ static int cmd_si(char *args) {
 	char *endptr;
 	int step = strtol(arg, &endptr, 10);
 	if (*endptr != '\0')
-	    printf("f**k!");
+	    printf("Please input a positive integer!\n");
 	else {
 	    cpu_exec(step);
 	}
