@@ -56,19 +56,33 @@ static int cmd_q(char *args) {
 static int cmd_help(char *args);
 
 static int cmd_si(char *args) {
-    /* extract the first argument*/
+    /* extract the first argument */
     char *arg = strtok(NULL, " ");
     if (arg == NULL)
+	// execute one step by default
 	cpu_exec(1);
     else {
 	char *endptr;
 	int step = strtol(arg, &endptr, 10);
+	/* the parameter of step count should be a positive integer */
 	if (*endptr != '\0')
 	    printf("Please input a positive integer instead of \"%s\"\n", arg);
 	else {
 	    cpu_exec(step);
 	}
     }
+    return 0;
+}
+
+static int cmd_info(char *args) {
+    /*extract the first argument */
+    char *arg = strtok(NULL, " ");
+    if (*arg == 'r')
+	isa_reg_display();
+    else if (*arg == 'w')
+	printf("This command should print the current state of watchpoint but TODO now");
+    else
+	printf("Unknown options and please input \"help info\"");
     return 0;
 }
 
@@ -81,6 +95,7 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   { "si", "Execute N(default one) step", cmd_si },
+  { "info", "Print current state of the program", cmd_info },
 
   /* TODO: Add more commands */
 
