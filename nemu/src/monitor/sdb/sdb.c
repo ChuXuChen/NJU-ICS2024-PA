@@ -80,9 +80,9 @@ static int cmd_info(char *args) {
     if (*arg == 'r')
 	isa_reg_display();
     else if (*arg == 'w')
-	printf("This command should print the current state of watchpoint but TODO now");
+	printf("This command should print the current state of watchpoint but TODO now\n");
     else
-	printf("Unknown options and please input \"help info\"");
+	printf("Unknown options and please input \"help info\"\n");
     return 0;
 }
 
