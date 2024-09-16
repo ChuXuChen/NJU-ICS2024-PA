@@ -55,6 +55,23 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+static int cmd_si(char *args) {
+    /* extract the first argument*/
+    char *arg = strtok(NULL, " ");
+    if (arg == NULL)
+	cpu_exec(1);
+    else {
+	char *endptr;
+	int step = strtol(arg, &endptr, 10);
+	if (*endptr != '\0')
+	    printf("f**k!");
+	else {
+	    cpu_exec(step);
+	}
+    }
+    return 0;
+}
+
 static struct {
   const char *name;
   const char *description;
@@ -63,6 +80,7 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
+  { "si [N]", "Execute N(default one) step", cmd_si },
 
   /* TODO: Add more commands */
 
