@@ -94,8 +94,9 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-  { "si", "Execute N(default one) step", cmd_si },
-  { "info", "Print current state of (r)register or (w)watchpoint", cmd_info },
+  { "si", "si [N], Execute N(default one) step", cmd_si },
+  { "info", "info SUBCMD, Print current state of (r)register or (w)watchpoint", cmd_info },
+  { "x", "Scan the information in the memory"}
 
   /* TODO: Add more commands */
 
