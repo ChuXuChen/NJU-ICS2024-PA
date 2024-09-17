@@ -102,7 +102,7 @@ static int cmd_x(char *args) {
 	else if (*endptr2 != '\0')
 	    printf("EXPR should ****TODO\n");
 	for (int i = 0; i < num; ++i) {
-	    printf("%x", addr);
+	    printf("%x\n", addr);
 //	    printf("%x---%x\n", addr, paddr_read(addr, 4));
 	    addr += 4;
 	}
