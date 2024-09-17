@@ -18,6 +18,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include "memory/paddr.h"
 
 static int is_batch_mode = false;
 
@@ -86,6 +87,28 @@ static int cmd_info(char *args) {
     return 0;
 }
 
+static int cmd_x(char *args) {
+    /* extract the first argument */
+    char *arg1 = strtok(NULL, " ");
+    char *arg2 = strtok(NULL, " ");
+    if (arg1 == NULL || arg2 == NULL)
+	printf("Please input in the format like \"x N EXPR\"\n");
+    else {
+	char *endptr1, *endptr2;
+	int num = strtol(arg1, &endptr1, 10);
+	paddr_t addr = strtol(arg2, &endptr2, 16);
+	if (*endptr1 != '\0')
+	    printf("N should be a decimal positive integer\n");
+	else if (*endptr2 != '\0')
+	    printf("EXPR should ****TODO\n");
+	for (int i = 0; i < num; ++i) {
+	    printf("%x---%x\n", addr, paddr_read(addr, 4));
+	    addr += 4;
+	}
+    }
+    return 0;
+}
+
 static struct {
   const char *name;
   const char *description;
@@ -96,7 +119,7 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "si", "si [N], Execute N(default one) step", cmd_si },
   { "info", "info SUBCMD, Print current state of (r)register or (w)watchpoint", cmd_info },
-  { "x", "Scan the information in the memory"}
+  { "x", "x N EXPR, Print data from memory address EXPR to EXPR+4N per 4 Bytes", cmd_x },
 
   /* TODO: Add more commands */
 
