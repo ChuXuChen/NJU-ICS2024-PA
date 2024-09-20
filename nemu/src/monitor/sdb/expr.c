@@ -264,6 +264,10 @@ bool check_parentheses(int p, int q) {
 	    count++;
 	else if (tokens[i].type == ')')
 	    count--;
+	if (count == 0) {
+	    printf("The expression is not wrapped in parentheses");
+	    return false;
+	}
 	if (count < 0) {
 	    printf("Illegal expression");
 	    return false;
