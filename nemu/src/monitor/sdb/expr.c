@@ -265,12 +265,20 @@ bool check_parentheses(int p, int q) {
 	    count++;
 	else if (tokens[i].type == ')')
 	    count--;
-	if (count < 0)
+	if (count < 0) {
+	    printf("Illegal expression");
 	    return false;
+	}
     }
-    if (count == 0 && tokens[p].type == '(' && tokens[q].type == ')')
+    if (count != 0) {
+	printf("Illegal expression");
+	return false;
+    } else if ( tokens[p].type == '(' && tokens[q].type == ')')
 	return true;
-    return false;
+    else {
+	printf("The expression is not wrapped in parentheses");
+        return false;
+    }
 }
 
 int main_operator_subscript(int p, int q, bool *success) {
@@ -305,6 +313,7 @@ word_t eval(int p, int q, bool *success) {
     if (p > q) {
 	/* Bad Expression */
 	*success = false;
+	printf("Bad Expression");
 	assert(0);
     } else if (p == q) {
 	/* Single token */
@@ -361,9 +370,9 @@ word_t eval(int p, int q, bool *success) {
 	    case TK_NEQ:
 		return val1 != val2;
 	    case TK_LE:
-		return val1 <= val2;
+		return (sword_t)val1 <= (sword_t)val2;
 	    case TK_GE:
-		return val1 >= val2;
+		return (sword_t)val1 >= (sword_t)val2;
 	    case TK_AND:
 		return val1 && val2;
 	    case TK_OR:
