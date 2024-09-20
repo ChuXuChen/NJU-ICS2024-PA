@@ -265,11 +265,11 @@ bool check_parentheses(int p, int q) {
 	else if (tokens[i].type == ')')
 	    count--;
 	if (count == 0) {
-	    printf("The expression is not wrapped in parentheses");
+	    printf("The expression is not wrapped in parentheses\n");
 	    return false;
 	}
 	if (count < 0) {
-	    printf("Illegal expression");
+	    printf("Illegal expression\n");
 	    return false;
 	}
     }
@@ -278,12 +278,12 @@ bool check_parentheses(int p, int q) {
     else if (tokens[q].type == ')')
 	count--;
     if (count != 0) {
-	printf("Illegal expression");
+	printf("Illegal expression\n");
 	return false;
     } else if ( tokens[p].type == '(' && tokens[q].type == ')')
 	return true;
     else {
-	printf("The expression is not wrapped in parentheses");
+	printf("The expression is not wrapped in parentheses\n");
         return false;
     }
 }

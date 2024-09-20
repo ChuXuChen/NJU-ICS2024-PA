@@ -222,7 +222,7 @@ void test_expr() {
 	word_t res = expr(line, &success);
         assert(success);
 	if (res != true_value) {
-	    printf("Wrong answer\n");
+	    printf("Wrong answer\nThe calculation results is %u but true value is %u\n", res, true_value);
 	    assert(0);
 	}
 	memset(line, '\0', read);
