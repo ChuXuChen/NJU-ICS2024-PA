@@ -218,7 +218,7 @@ void test_expr() {
     while(true) {
 	if (fscanf(fp, "%u", &true_value) == -1) break;
 	ssize_t read = getline(&line, &len, fp);
-	line[read] = '\0';
+	line[read - 1] = '\0';
 	word_t res = expr(line, &success);
         assert(success);
 	if (res != true_value) {
