@@ -248,12 +248,7 @@ word_t expr(char *e, bool *success) {
 	    case '*':
 		tokens[i].type = TK_DEREFERENCE;
 		break;
-	    case '!':
-		tokens[i].type = '!';
-		break;
 	    default:
-		printf("Duplicate operator");
-		assert(0);
 		break;
 	}
     }
