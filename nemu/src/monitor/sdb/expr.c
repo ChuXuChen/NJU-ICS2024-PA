@@ -40,23 +40,23 @@ static struct rule {
 
   {" +", TK_NOTYPE},							// spaces
   {"\\+", '+'},								// plus
-  {"\\-", '-'},								// minus
+  {"-", '-'},								// minus
   {"\\*", '*'},								// multiply
-  {"\\/", '/'},								// divide
-  {"\\=\\=", TK_EQ},							// equal
-  {"\\!\\=", TK_NEQ},							// not equal
-  {"\\<\\=", TK_LE},							// less or equal
-  {"\\>\\=", TK_GE},							// greater or equal
-  {"\\<", '<'},								// less
-  {"\\>", '>'},								// greater
+  {"/", '/'},								// divide
+  {"==", TK_EQ},							// equal
+  {"!=", TK_NEQ},							// not equal
+  {"<=", TK_LE},							// less or equal
+  {">=", TK_GE},							// greater or equal
+  {"<", '<'},								// less
+  {">", '>'},								// greater
   {"\\(", '('},								// left bracket
   {"\\)", ')'},								// right bracket
   {"[0-9]+", TK_NUM},							// decimal number
   {"0[xX][0-9a-fA-F]+", TK_HEX},					// hexadecimal number
   {"\\$[\\$0|ra|[s|g|t]p|t[0-6]|a[0-7]|s[0-9]|s1[0-1]]", TK_REGISTER},	// register
-  {"\\&\\&", TK_AND},							// and
+  {"&&", TK_AND},							// and
   {"\\|\\|", TK_OR},							// or
-  {"\\!", '!'},								// not
+  {"!", '!'},								// not
 };
 
 #define NR_REGEX ARRLEN(rules)
