@@ -207,8 +207,9 @@ void sdb_mainloop() {
 
 void test_expr() {
     FILE *fp = fopen("/home/ics/ics2024/nemu/tools/gen-expr/build/input", "r");
-    char line[1000];
+    char *line;
     bool success = false;
+    size_t len = 0;
     word_t true_value = 0;
     if (fp == NULL) {
 	printf("Please generate the test file firstly\n");
@@ -216,8 +217,8 @@ void test_expr() {
     }
     while(true) {
 	if (fscanf(fp, "%u", &true_value) == -1) break;
-	char *temp = fgets(line, 1000, fp);
-	assert(temp == NULL);
+	ssize_t read = getline(&line, &len, fp);
+	line[read - 1] = '\0';
 	word_t res = expr(line, &success);
         assert(success);
 	if (res != true_value) {
