@@ -259,7 +259,7 @@ word_t expr(char *e, bool *success) {
 
 bool check_parentheses(int p, int q) {
     int count = 0;
-    for (int i = p; i < q + 1; ++i) {
+    for (int i = p; i < q; ++i) {
 	if (tokens[i].type == '(')
 	    count++;
 	else if (tokens[i].type == ')')
@@ -273,6 +273,10 @@ bool check_parentheses(int p, int q) {
 	    return false;
 	}
     }
+    if (tokens[q].type == '(')
+	count++;
+    else if (tokens[q].type == ')')
+	count--;
     if (count != 0) {
 	printf("Illegal expression");
 	return false;
