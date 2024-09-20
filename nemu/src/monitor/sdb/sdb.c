@@ -218,13 +218,14 @@ void test_expr() {
     while(true) {
 	if (fscanf(fp, "%u", &true_value) == -1) break;
 	ssize_t read = getline(&line, &len, fp);
-	line[read - 1] = '\0';
+	line[read] = '\0';
 	word_t res = expr(line, &success);
         assert(success);
 	if (res != true_value) {
 	    printf("Wrong answer\n");
 	    assert(0);
 	}
+	memset(line, '\0', read);
     }
     fclose(fp);
     Log("EXPR test pass");
