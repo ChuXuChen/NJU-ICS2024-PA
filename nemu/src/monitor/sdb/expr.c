@@ -248,14 +248,18 @@ word_t expr(char *e, bool *success) {
 	    case '*':
 		tokens[i].type = TK_DEREFERENCE;
 		break;
+	    case '!':
+		tokens[i].type = '!';
+		break;
 	    default:
+		printf("Duplicate operator");
+		assert(0);
 		break;
 	}
     }
-  return eval(0, nr_token - 1, success);
   }
 
-  return 0;
+  return eval(0, nr_token - 1, success);
 }
 
 bool check_parentheses(int p, int q) {
