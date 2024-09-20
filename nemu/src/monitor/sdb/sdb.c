@@ -76,7 +76,7 @@ static int cmd_si(char *args) {
 }
 
 static int cmd_info(char *args) {
-    /*extract the first argument */
+    /* extract the first argument */
     char *arg = strtok(NULL, " ");
     if (*arg == 'r')
 	isa_reg_display();
@@ -109,6 +109,18 @@ static int cmd_x(char *args) {
     return 0;
 }
 
+static int cmd_p(char *args) {
+    bool success = false;
+    word_t res = expr(args, &success);
+    if (!success) {
+	printf("Invalid expression\n");
+	assert(0);
+    }
+    else
+	printf("EXPR is %u\n", res);
+    return 0;
+}
+
 static struct {
   const char *name;
   const char *description;
@@ -120,6 +132,7 @@ static struct {
   { "si", "si [N], Execute N(default one) step", cmd_si },
   { "info", "info SUBCMD, Print current state of (r)register or (w)watchpoint", cmd_info },
   { "x", "x N EXPR, Print data from memory address EXPR to EXPR+4N per 4 Bytes", cmd_x },
+  { "p", "p EXPR, Caculate the value of expression EXPR", cmd_p}
 
   /* TODO: Add more commands */
 
@@ -192,9 +205,36 @@ void sdb_mainloop() {
   }
 }
 
+void test_expr() {
+    FILE *fp = fopen("/home/ics/ics2024/nemu/tools/gen-expr/build/input", "r");
+    char line[1000];
+    bool success = false;
+    word_t true_value = 0;
+    if (fp == NULL) {
+	printf("Please generate the test file firstly\n");
+	assert(0);
+    }
+    while(true) {
+	if (fscanf(fp, "%u", &true_value) == -1) break;
+	char *temp = fgets(line, 1000, fp);
+	assert(temp == NULL);
+	word_t res = expr(line, &success);
+        assert(success);
+	if (res != true_value) {
+	    printf("Wrong answer\n");
+	    assert(0);
+	}
+    }
+    fclose(fp);
+    Log("EXPR test pass");
+}
+
 void init_sdb() {
   /* Compile the regular expressions. */
   init_regex();
+
+  /* Test the function of expression. */
+  test_expr();
 
   /* Initialize the watchpoint pool. */
   init_wp_pool();
