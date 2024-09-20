@@ -230,7 +230,7 @@ bool is_operand(int p) {
     return flag;
 }
 
-word_t eval(int, int);
+word_t eval(int, int, bool*);
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
@@ -252,7 +252,7 @@ word_t expr(char *e, bool *success) {
 		break;
 	}
     }
-  return eval(0, nr_token - 1);
+  return eval(0, nr_token - 1, success);
   }
 
   return 0;
@@ -273,7 +273,8 @@ bool check_parentheses(int p, int q) {
     return false;
 }
 
-int main_operator_subscript(int p, int q) {
+int main_operator_subscript(int p, int q, bool *success) {
+    *success = true;
     int count = 0, subscript = 0, priority = -1;
     for (int i = p; i < q + 1; ++i) {
 	if (is_operand(tokens[i].type))
@@ -290,15 +291,20 @@ int main_operator_subscript(int p, int q) {
 	    continue;
 	int temp_priority = find_priority(tokens[i].type);
 	if (priority <= temp_priority) {
+	    priority = temp_priority;
 	    subscript = i;
 	}
     }
+    if (priority == -1)
+	*success = false;
     return subscript;
 }
 
-word_t eval(int p, int q) {
+word_t eval(int p, int q, bool *success) {
+    *success = true;
     if (p > q) {
 	/* Bad Expression */
+	*success = false;
 	assert(0);
     } else if (p == q) {
 	/* Single token */
@@ -308,25 +314,29 @@ word_t eval(int p, int q) {
 	    char *str = tokens[p].str + 2;
 	    return (word_t)strtol(str, NULL, 16);
 	} else if (tokens[p].type == TK_REGISTER) {
-	    bool *success = false;
-	    word_t value = isa_reg_str2val(tokens[p].str, success);
-	    if (!success)
+	    bool *success2 = false;
+	    word_t value = isa_reg_str2val(tokens[p].str, success2);
+	    if (!success2) {
+		*success = false;
 		assert(0);
+	    }
 	    return value;
 	} else if (is_operator(p)){
 	    printf("Error:Duplicate operator");
+	    *success = false;
 	    assert(0);
 	} else {
 	    printf("Undefined token");
+	    *success = false;
 	    assert(0);
 	}
     } else if (check_parentheses(p, q)) {
 	/* Remove the outmost pair of parentheses if it wraps the entire expression */
-	return eval(p + 1, q - 1);
+	return eval(p + 1, q - 1, success);
     } else {
-	int op = main_operator_subscript(p, q);
-	word_t val1 = eval(p, op - 1);
-	word_t val2 = eval(op + 1, q);
+	int op = main_operator_subscript(p, q, success);
+	word_t val1 = eval(p, op - 1, success);
+	word_t val2 = eval(op + 1, q, success);
 	switch(tokens[op].type) {
 	    case '+':
 		return val1 + val2;
@@ -337,6 +347,7 @@ word_t eval(int p, int q) {
 	    case '/':
 		if (val2 == 0) {
 		    printf("ERROR:Divided by zero");
+		    *success = false;
 		    assert(0);
 		} else {
 		    return (sword_t)val1 / (sword_t)val2;
@@ -365,6 +376,7 @@ word_t eval(int p, int q) {
 		return -val2;
 	    default:
 		printf("The operator is not supported");
+		*success = false;
 		assert(0);
 	}
     }
