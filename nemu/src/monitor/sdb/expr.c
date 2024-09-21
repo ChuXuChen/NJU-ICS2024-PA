@@ -102,8 +102,8 @@ static bool make_token(char *e) {
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
-        Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-            i, rules[i].regex, position, substr_len, substr_len, substr_start);
+        /* Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
+            i, rules[i].regex, position, substr_len, substr_len, substr_start); */
 
         position += substr_len;
 
@@ -270,7 +270,7 @@ bool check_parentheses(int p, int q) {
 	    return false;
 	}
 	if (count < 0) {
-	    printf("Illegal expression\n");
+	    printf("Missing left parentheses\n");
 	    return false;
 	}
     }
@@ -279,12 +279,11 @@ bool check_parentheses(int p, int q) {
     else if (tokens[q].type == ')')
 	count--;
     if (count != 0) {
-	printf("Illegal expression\n");
+	printf("The parentheses does not match\n");
 	return false;
     } else if ( tokens[p].type == '(' && tokens[q].type == ')')
 	return true;
     else {
-	printf("The expression is not wrapped in parentheses\n");
         return false;
     }
 }
@@ -321,7 +320,7 @@ word_t eval(int p, int q, bool *success) {
     if (p > q) {
 	/* Bad Expression */
 	*success = false;
-	printf("Bad Expression");
+	Log("Bad Expression");
 	assert(0);
     } else if (p == q) {
 	/* Single token */
@@ -339,7 +338,7 @@ word_t eval(int p, int q, bool *success) {
 	    }
 	    return value;
 	} else if (is_operator(p)){
-	    printf("Error:Duplicate operator");
+	    printf("Duplicate operator");
 	    *success = false;
 	    assert(0);
 	} else {
@@ -363,7 +362,7 @@ word_t eval(int p, int q, bool *success) {
 		return val1 * val2;
 	    case '/':
 		if (val2 == 0) {
-		    printf("ERROR:Divided by zero");
+		    printf("Divided by zero");
 		    *success = false;
 		    assert(0);
 		} else {
