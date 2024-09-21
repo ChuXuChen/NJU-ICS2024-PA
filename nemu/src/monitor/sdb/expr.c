@@ -335,17 +335,17 @@ word_t eval(int p, int q, bool *success) {
 	    if (!success2) {
 		*success = false;
 		printf("No this register");
-		return -1;
+		assert(0);
 	    }
 	    return value;
 	} else if (is_operator(p)){
 	    printf("Duplicate operator\n");
 	    *success = false;
-	    return -1;
+	    assert(0);
 	} else {
 	    printf("Undefined token\n");
 	    *success = false;
-	    return -1;
+	    assert(0);
 	}
     } else if (check_parentheses(p, q)) {
 	/* Remove the outmost pair of parentheses if it wraps the entire expression */
@@ -358,7 +358,7 @@ word_t eval(int p, int q, bool *success) {
 	}
 	if (op == q) {
 	    printf("Illegal expression\n");
-	    return -1;
+	    assert(0);
 	}
 	word_t val1 = op > p ? eval(p, op - 1, success) : 0;
 	word_t val2 = eval(op + 1, q, success);
