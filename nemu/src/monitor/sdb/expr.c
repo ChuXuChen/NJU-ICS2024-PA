@@ -334,17 +334,18 @@ word_t eval(int p, int q, bool *success) {
 	    word_t value = isa_reg_str2val(tokens[p].str, success2);
 	    if (!success2) {
 		*success = false;
-		assert(0);
+		printf("No this register");
+		return -1;
 	    }
 	    return value;
 	} else if (is_operator(p)){
 	    printf("Duplicate operator\n");
 	    *success = false;
-	    assert(0);
+	    return -1;
 	} else {
 	    printf("Undefined token\n");
 	    *success = false;
-	    assert(0);
+	    return -1;
 	}
     } else if (check_parentheses(p, q)) {
 	/* Remove the outmost pair of parentheses if it wraps the entire expression */
@@ -353,7 +354,7 @@ word_t eval(int p, int q, bool *success) {
 	int op = main_operator_subscript(p, q, success);
 	if (op == q) {
 	    printf("Illegal expression\n");
-	    assert(0);
+	    return -1;
 	}
 	word_t val1 = op > p ? eval(p, op - 1, success) : 0;
 	word_t val2 = eval(op + 1, q, success);
@@ -368,7 +369,7 @@ word_t eval(int p, int q, bool *success) {
 		if (val2 == 0) {
 		    printf("Divided by zero");
 		    *success = false;
-		    assert(0);
+		    return -1;
 		} else {
 		    return (sword_t)val1 / (sword_t)val2;
 		}
