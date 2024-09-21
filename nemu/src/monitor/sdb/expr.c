@@ -352,6 +352,10 @@ word_t eval(int p, int q, bool *success) {
 	return eval(p + 1, q - 1, success);
     } else {
 	int op = main_operator_subscript(p, q, success);
+	if (!success) {
+	    printf("Illegal exxpression");
+	    return -1;
+	}
 	if (op == q) {
 	    printf("Illegal expression\n");
 	    return -1;
