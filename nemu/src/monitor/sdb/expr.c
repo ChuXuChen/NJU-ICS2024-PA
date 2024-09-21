@@ -53,7 +53,7 @@ static struct rule {
   {"\\)", ')'},								// right parentheses
   {"0[xX][0-9a-fA-F]+", TK_HEX},					// hexadecimal number
     {"[0-9]+", TK_NUM},							// decimal number 
-  {"(\\$0|ra|[sgt]p|t[0-6]|a[0-7]|s[0-9]|s1[0-1])", TK_REGISTER},	// register
+  {"\\$(\\$0|ra|[sgt]p|t[0-6]|a[0-7]|s[0-9]|s1[0-1])", TK_REGISTER},	// register
   {"&&", TK_AND},							// and
   {"\\|\\|", TK_OR},							// or
   {"!", '!'},								// not
@@ -331,8 +331,8 @@ word_t eval(int p, int q, bool *success) {
 	    return (word_t)strtol(str, NULL, 16);
 	} else if (tokens[p].type == TK_REGISTER) {
 	    bool *success2 = false;
-	    word_t value = isa_reg_str2val(tokens[p].str, success2);
-	    if (!success2) {
+	    word_t value = isa_reg_str2val(tokens[p].str + 1, success2);
+	    if (!*success2) {
 		*success = false;
 		printf("No this register");
 		assert(0);
