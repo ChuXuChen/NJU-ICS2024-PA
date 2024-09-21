@@ -53,7 +53,7 @@ static struct rule {
   {"\\)", ')'},								// right parentheses
   {"0[xX][0-9a-fA-F]+", TK_HEX},					// hexadecimal number
     {"[0-9]+", TK_NUM},							// decimal number 
-  {"\\$(\\$0|ra|[sgt]p|t[0-6]|a[0-7]|s[0-9]|s1[0-1])", TK_REGISTER},	// register
+  {"(\\$0|ra|[sgt]p|t[0-6]|a[0-7]|s[0-9]|s1[0-1])", TK_REGISTER},	// register
   {"&&", TK_AND},							// and
   {"\\|\\|", TK_OR},							// or
   {"!", '!'},								// not
