@@ -34,7 +34,7 @@ static char *code_format =
 uint32_t nr_buf = 0;
 
 int choose(int n) {
-    return nr_buf < 650 ? rand() % n : 0;
+    return nr_buf < 80 ? rand() % n : 0;
 }
 
 void gen_blank(int num) {
