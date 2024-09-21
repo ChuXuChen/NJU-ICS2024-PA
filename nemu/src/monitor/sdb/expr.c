@@ -338,11 +338,11 @@ word_t eval(int p, int q, bool *success) {
 	    }
 	    return value;
 	} else if (is_operator(p)){
-	    printf("Duplicate operator");
+	    printf("Duplicate operator\n");
 	    *success = false;
 	    assert(0);
 	} else {
-	    printf("Undefined token");
+	    printf("Undefined token\n");
 	    *success = false;
 	    assert(0);
 	}
@@ -351,7 +351,11 @@ word_t eval(int p, int q, bool *success) {
 	return eval(p + 1, q - 1, success);
     } else {
 	int op = main_operator_subscript(p, q, success);
-	word_t val1 = eval(p, op - 1, success);
+	if (op == q) {
+	    printf("Illegal expression\n");
+	    assert(0);
+	}
+	word_t val1 = op > p ? eval(p, op - 1, success) : 0;
 	word_t val2 = eval(op + 1, q, success);
 	switch(tokens[op].type) {
 	    case '+':
