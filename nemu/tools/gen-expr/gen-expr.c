@@ -34,7 +34,7 @@ static char *code_format =
 uint32_t nr_buf = 0;
 
 int choose(int n) {
-    return nr_buf < 80 ? rand() % n : 0;
+    return nr_buf < 60 ? rand() % n : 0;
 }
 
 void gen_blank(int num) {
@@ -44,28 +44,28 @@ void gen_blank(int num) {
 }
 
 void gen(char c) {
-    gen_blank(choose(3));
+    gen_blank(choose(1));
     buf[nr_buf++] = c;
-    gen_blank(choose(3));
+    gen_blank(choose(1));
 }
 
 void gen_num() {
-    int rand = choose(1000);
-    int a = rand % 10, b = ((rand - a) / 10) % 10, c = (rand - a - 10 * b) / 100;
-    gen_blank(choose(3));
+    int rand_num = rand() % 1000;
+    int a = rand_num % 10, b = ((rand_num - a) / 10) % 10, c = (rand_num - a - 10 * b) / 100;
+    gen_blank(choose(1));
     if (c > 0)
 	buf[nr_buf++] = c + '0';
     if (b > 0)
 	buf[nr_buf++] = b + '0';
     buf[nr_buf++] = a + '0';
-    gen_blank(choose(3));
+    gen_blank(choose(2));
 }
 
 void gen_rand_op() {
     char op_list[4] = {'+', '-', '*', '/'};
-    gen_blank(choose(3));
+    gen_blank(choose(2));
     buf[nr_buf++] = op_list[choose(4)];
-    gen_blank(choose(3));
+    gen_blank(choose(1));
 }
 
 static void gen_rand_expr() {
