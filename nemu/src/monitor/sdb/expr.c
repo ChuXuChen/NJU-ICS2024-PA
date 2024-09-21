@@ -85,7 +85,7 @@ typedef struct token {
   char str[32];
 } Token;
 
-static Token tokens[32] __attribute__((used)) = {};
+static Token tokens[128] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
 static bool make_token(char *e) {
@@ -111,7 +111,7 @@ static bool make_token(char *e) {
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-        bzero(tokens[i].str, 32);
+	memset(tokens[i].str, '\0', 32);
 	switch (rules[i].token_type) {
 	  case TK_NOTYPE:
 	    break;
@@ -232,7 +232,7 @@ bool is_operand(int p) {
 
 word_t eval(int, int, bool*);
 
-word_t expr(char *e, bool *success) {
+word_t expr(char *e, bool *success) { 
   if (!make_token(e)) {
     *success = false;
     return 0;
