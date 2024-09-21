@@ -111,7 +111,6 @@ static bool make_token(char *e) {
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-	memset(tokens[i].str, '\0', 32);
 	switch (rules[i].token_type) {
 	  case TK_NOTYPE:
 	    break;
@@ -233,6 +232,9 @@ bool is_operand(int p) {
 word_t eval(int, int, bool*);
 
 word_t expr(char *e, bool *success) { 
+  for (int i = 0; i < 128; ++i) {
+    memset(tokens[i].str, '\0', 32);
+  }
   if (!make_token(e)) {
     *success = false;
     return 0;
