@@ -354,7 +354,7 @@ word_t eval(int p, int q, bool *success) {
 	int op = main_operator_subscript(p, q, success);
 	if (!success) {
 	    printf("Illegal exxpression");
-	    return -1;
+	    assert(0);
 	}
 	if (op == q) {
 	    printf("Illegal expression\n");
