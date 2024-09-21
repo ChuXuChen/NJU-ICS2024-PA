@@ -330,10 +330,8 @@ word_t eval(int p, int q, bool *success) {
 	    char *str = tokens[p].str + 2;
 	    return (word_t)strtol(str, NULL, 16);
 	} else if (tokens[p].type == TK_REGISTER) {
-	    bool *success2 = false;
-	    word_t value = isa_reg_str2val(tokens[p].str + 1, success2);
-	    if (!*success2) {
-		*success = false;
+	    word_t value = isa_reg_str2val(tokens[p].str + 1, success);
+	    if (!*success) {
 		printf("No this register");
 		assert(0);
 	    }
