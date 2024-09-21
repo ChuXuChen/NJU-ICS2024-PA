@@ -90,21 +90,25 @@ static int cmd_info(char *args) {
 static int cmd_x(char *args) {
     /* extract the first argument */
     char *arg1 = strtok(NULL, " ");
-    char *arg2 = strtok(NULL, " ");
-    if (arg1 == NULL || arg2 == NULL)
-	printf("Please input in the format like \"x N EXPR\"\n");
-    else {
-	char *endptr1, *endptr2;
-	int num = strtol(arg1, &endptr1, 10);
-	paddr_t addr = strtol(arg2, &endptr2, 16);
-	if (*endptr1 != '\0')
-	    printf("N should be a decimal positive integer\n");
-	else if (*endptr2 != '\0')
-	    printf("EXPR should ****TODO\n");
-	for (int i = 0; i < num; ++i) {
-	    printf("%x---%x\n", addr, paddr_read(addr, 4));
-	    addr += 4;
-	}
+    char *arg2 = strtok(NULL, "#");
+    if (arg1 == NULL)
+	arg1 = "1";
+    if (arg2 == NULL)
+	arg2 = "0X80000000";
+    char *endptr;
+    int num = strtol(arg1, &endptr, 10);
+    bool success = false;
+    paddr_t addr = expr(arg2, &success);
+    if (*endptr != '\0') {
+        printf("N should be a decimal positive integer\n");
+	assert(0);
+    } else if (!success) {
+        printf("Invalid EXPR\n");
+	assert(0);
+    }
+    for (int i = 0; i < num; ++i) {
+        printf("0X%x---%d\n", addr, paddr_read(addr, 4));
+        addr += 4;
     }
     return 0;
 }
