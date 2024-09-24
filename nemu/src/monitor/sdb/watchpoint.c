@@ -17,9 +17,11 @@
 
 #define NR_WP 32
 
+#define EXPR_LEN 128
+
 typedef struct watchpoint {
   int NO;
-  char *EXPR;
+  char EXPR[EXPR_LEN];
   word_t last_value;
   word_t current_value;
   char *is_changed;
@@ -66,7 +68,7 @@ void init_wp_pool() {
   int i;
   for (i = 0; i < NR_WP; i ++) {
     wp_pool[i].NO = i;
-    wp_pool[i].EXPR = NULL;
+    memset(wp_pool[i].EXPR, '\0', sizeof(wp_pool[i].EXPR) / sizeof(char));
     wp_pool[i].last_value = 0;
     wp_pool[i].current_value = 0;
     wp_pool[i].is_changed = "False";
