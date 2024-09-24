@@ -89,8 +89,7 @@ void wp_display() {
     }
     printf("NO\tEXPR\tlast\tcurrent\tis_changed\n");
     while (h) {
-	// printf("%d\t%s\t%u\t%u\t%s\n", h->NO, h->EXPR, h->last_value, h->current_value, h->is_changed);
-	printf("%s", h->EXPR);
+	printf("%d\t%s\t%u\t%u\t%s\n", h->NO, h->EXPR, h->last_value, h->current_value, h->is_changed);
 	h = h -> next;
     }
 }
