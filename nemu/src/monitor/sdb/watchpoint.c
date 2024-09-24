@@ -124,5 +124,5 @@ void wp_difftest() {
 	p = p->next;
     }
     if (stop)
-	nemu_state.state = NEMU_STOP;
+	nemu_state.state = NEMU_QUIT;
 }
