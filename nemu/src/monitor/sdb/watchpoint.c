@@ -87,9 +87,9 @@ void wp_display() {
 	printf("No watchpoints\n");
 	return;
     }
-    printf("NO\tEXPR\t\tlast\tcurrent\tis_changed\n");
+    printf("NO\tEXPR\t\tlast\t\tcurrent\t\tis_changed\n");
     while (h) {
-	printf("%d\t%-12s\t%u\t%u\t%s\n", h->NO, h->EXPR, h->last_value, h->current_value, h->is_changed);
+	printf("%d\t%-12s\t%-12u\t%-12u\t%s\n", h->NO, h->EXPR, h->last_value, h->current_value, h->is_changed);
 	h = h -> next;
     }
 }
