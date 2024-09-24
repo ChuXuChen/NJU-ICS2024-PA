@@ -94,7 +94,7 @@ void wp_display() {
 
 void wp_set(char *args, word_t value) {
     WP *wp = new_wp();
-    wp->EXPR = args;
+    strcpy(wp->EXPR, args);
     wp->last_value = value;
     wp->current_value = value;
     wp->is_changed = "False";
