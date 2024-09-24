@@ -108,3 +108,21 @@ void wp_delete(int n) {
     free_wp(p);
     printf("Delete %drd watchpoint\n", n);    
 }
+
+void wp_difftest() {
+    WP *p = head;
+    bool stop = false;
+    while(p) {
+	p->current_value = expr(p->EXPR, NULL);
+	if (p->current_value == p->last_value) {
+	    p->is_changed = "False";
+	} else {
+	    p->is_changed = "True";
+	    stop = false;
+	}
+	p->last_value = p->current_value;
+	p = p->next;
+    }
+    if (stop)
+	nemu_state.state = NEMU_STOP;
+}
