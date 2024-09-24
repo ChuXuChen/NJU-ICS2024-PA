@@ -81,10 +81,10 @@ void init_wp_pool() {
 void wp_display() {
     WP *h = head;
     if (h == NULL) {
-	printf("No watchpoints");
+	printf("No watchpoints\n");
 	return;
     }
-    printf("NO\tEXPR\tlast_value\tcurrent_value\tis_changed\n");
+    printf("NO\tEXPR\tlast\tcurrent\tis_changed\n");
     while (h) {
 	printf("%d\t%s\t%u\t%u\t%s\n", h->NO, h->EXPR, h->last_value, h->current_value, h->is_changed);
 	h = h -> next;
@@ -103,5 +103,5 @@ void wp_set(char *args, word_t value) {
 void wp_delete(int n) {
     WP *p = &wp_pool[n];
     free_wp(p);
-    printf("Delete %drd watchpoint", n);    
+    printf("Delete %drd watchpoint\n", n);    
 }
