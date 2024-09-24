@@ -186,12 +186,14 @@ static int cmd_p(char *args) {
 
 static int cmd_w(char *args) {
     bool success;
+    char args_copy[128];
+    strcpy(args_copy, args);
     word_t value = expr(args, &success);
     if (!success) {
 	printf("Invalid expression\n");
 	assert(0);
     }
-    wp_set(args, value);
+    wp_set(args_copy, value);
     return 0;
 }
 
