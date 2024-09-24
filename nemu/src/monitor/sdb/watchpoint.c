@@ -113,7 +113,8 @@ void wp_difftest() {
     WP *p = head;
     bool stop = false;
     while(p) {
-	p->current_value = expr(p->EXPR, NULL);
+	bool success;
+	p->current_value = expr(p->EXPR, &success);
 	if (p->current_value == p->last_value) {
 	    p->is_changed = "False";
 	} else {
@@ -124,5 +125,5 @@ void wp_difftest() {
 	p = p->next;
     }
     if (stop)
-	nemu_state.state = NEMU_QUIT;
+	nemu_state.state = NEMU_STOP;
 }
