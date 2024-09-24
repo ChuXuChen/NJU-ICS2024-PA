@@ -66,6 +66,7 @@ void init_wp_pool() {
   int i;
   for (i = 0; i < NR_WP; i ++) {
     wp_pool[i].NO = i;
+    wp_pool[i].EXPR = NULL;
     wp_pool[i].last_value = 0;
     wp_pool[i].current_value = 0;
     wp_pool[i].is_changed = "False";
