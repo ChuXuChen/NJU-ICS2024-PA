@@ -118,7 +118,7 @@ void wp_difftest() {
 	    p->is_changed = "False";
 	} else {
 	    p->is_changed = "True";
-	    stop = false;
+	    stop = true;
 	}
 	p->last_value = p->current_value;
 	p = p->next;
