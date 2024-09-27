@@ -18,11 +18,15 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include "memory/paddr.h"
 
 static int is_batch_mode = false;
 
 void init_regex();
 void init_wp_pool();
+void wp_display();
+void wp_set(char*, word_t);
+void wp_delete(int);
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -49,10 +53,23 @@ static int cmd_c(char *args) {
 
 
 static int cmd_q(char *args) {
-  return -1;
+    nemu_state.state = NEMU_QUIT;
+    return -1;
 }
 
 static int cmd_help(char *args);
+
+static int cmd_si(char *args);
+
+static int cmd_info(char *args);
+
+static int cmd_x(char *args);
+
+static int cmd_p(char *args);
+
+static int cmd_w(char *args);
+
+static int cmd_d(char *args);
 
 static struct {
   const char *name;
@@ -62,6 +79,12 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
+  { "si", "si [N], Execute N(default one) step", cmd_si },
+  { "info", "info SUBCMD, Print current state of (r)register or (w)watchpoint", cmd_info },
+  { "x", "x N EXPR, Print data from memory address EXPR to EXPR+4N per 4 Bytes", cmd_x },
+  { "p", "p EXPR, Caculate the value of expression EXPR", cmd_p },
+  { "w", "w EXPR, Stop executing when EXPR changed", cmd_w },
+  { "d", "d N, Delete Nrd watchpoints", cmd_d },
 
   /* TODO: Add more commands */
 
@@ -90,6 +113,97 @@ static int cmd_help(char *args) {
     printf("Unknown command '%s'\n", arg);
   }
   return 0;
+}
+
+static int cmd_si(char *args) {
+    /* extract the first argument */
+    char *arg = strtok(NULL, " ");
+    if (arg == NULL)
+	// execute one step by default
+	cpu_exec(1);
+    else {
+	char *endptr;
+	int step = strtol(arg, &endptr, 10);
+	/* the parameter of step count should be a positive integer */
+	if (*endptr != '\0')
+	    printf("Please input a positive integer instead of \"%s\"\n", arg);
+	else {
+	    cpu_exec(step);
+	}
+    }
+    return 0;
+}
+
+static int cmd_info(char *args) {
+    /* extract the first argument */
+    char *arg = strtok(NULL, " ");
+    if (*arg == 'r')
+	isa_reg_display();
+    else if (*arg == 'w')
+	wp_display();
+    else
+	printf("Unknown options and please input \"help info\"\n");
+    return 0;
+}
+
+static int cmd_x(char *args) {
+    /* extract the first argument */
+    char *arg1 = strtok(NULL, " ");
+    char *arg2 = strtok(NULL, "#");
+    if (arg1 == NULL)
+	arg1 = "1";
+    if (arg2 == NULL)
+	arg2 = "0X80000000";
+    char *endptr;
+    int num = strtol(arg1, &endptr, 10);
+    bool success = false;
+    paddr_t addr = expr(arg2, &success);
+    if (*endptr != '\0') {
+        printf("N should be a decimal positive integer\n");
+	assert(0);
+    } else if (!success) {
+        printf("Invalid EXPR\n");
+	assert(0);
+    }
+    for (int i = 0; i < num; ++i) {
+        printf("0X%x---%d\n", addr, paddr_read(addr, 4));
+        addr += 4;
+    }
+    return 0;
+}
+
+static int cmd_p(char *args) {
+    bool success = false;
+    word_t res = expr(args, &success);
+    if (!success) {
+	printf("Invalid expression\n");
+	assert(0);
+    }
+    else
+	printf("EXPR is %u\n", res);
+    return 0;
+}
+
+static int cmd_w(char *args) {
+    bool success;
+    word_t value = expr(args, &success);
+    if (!success) {
+	printf("Invalid expression\n");
+	assert(0);
+    }
+    wp_set(args, value);
+    return 0;
+}
+
+static int cmd_d(char *args) {
+    char *endptr;
+    int n = strtol(args, &endptr, 10);
+    if (*endptr != '\0') {
+	printf("Please input in the format like \"d N\", N is a positive integer\n");
+	return 0;
+    }
+    wp_delete(n);
+    return 0;
 }
 
 void sdb_set_batch_mode() {
@@ -134,9 +248,38 @@ void sdb_mainloop() {
   }
 }
 
+void test_expr() {
+    FILE *fp = fopen("/home/ics/ics2024/nemu/tools/gen-expr/build/input", "r");
+    char *line;
+    bool success = false;
+    size_t len = 0;
+    word_t true_value = 0;
+    if (fp == NULL) {
+	printf("Please generate the test file firstly\n");
+	assert(0);
+    }
+    while(true) {
+	if (fscanf(fp, "%u", &true_value) == -1) break;
+	ssize_t read = getline(&line, &len, fp);
+	line[read - 1] = '\0';
+	word_t res = expr(line, &success);
+        assert(success);
+	if (res != true_value) {
+	    printf("Wrong answer\nThe calculation results is %u but true value is %u\n", res, true_value);
+	    assert(0);
+	}
+	memset(line, '\0', read);
+    }
+    fclose(fp);
+    Log("EXPR test pass");
+}
+
 void init_sdb() {
   /* Compile the regular expressions. */
   init_regex();
+
+  /* Test the function of expression. */
+  test_expr();
 
   /* Initialize the watchpoint pool. */
   init_wp_pool();
