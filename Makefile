@@ -20,4 +20,9 @@ submit:
 	git gc
 	STUID=$(STUID) STUNAME=$(STUNAME) bash -c "$$(curl -s http://why.ink:8080/static/submit.sh)"
 
-.PHONY: default submit
+count:
+	@echo Now branch is $(shell git branch --show-current)
+	@echo $(shell find $(NEMU_HOME)/.. -name "*.c" | xargs cat | grep -a -v ^$$ | wc -l) non-blank lines in .c files
+	@echo $(shell find $(NEMU_HOME)/.. -name "*.h" | xargs cat | grep -a -v ^$$ | wc -l) non-blank lines in .h files
+
+.PHONY: default submit count
