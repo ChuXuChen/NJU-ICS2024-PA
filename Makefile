@@ -22,7 +22,7 @@ submit:
 
 count:
 	@echo Now branch is $(shell git branch --show-current)
-	@echo $(shell find $(NEMU_HOME)/.. -name "*.c" | xargs cat | grep -a -v ^$$ | wc -l)
-	@echo $(shell find $(NEMU_HOME)/.. -name "*.h" | xargs cat | grep -a -v ^$$ | wc -l)
+	@echo $(shell find $(NEMU_HOME)/.. -name "*.c" | xargs cat | grep -a -v ^$$ | wc -l) non-blank lines in .c files
+	@echo $(shell find $(NEMU_HOME)/.. -name "*.h" | xargs cat | grep -a -v ^$$ | wc -l) non-blank lines in .h files
 
 .PHONY: default submit count
